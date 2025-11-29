@@ -1,0 +1,29 @@
+name: Cloudflare ECH Scanner
+
+on:
+  workflow_dispatch:
+  #schedule:
+    #- cron: "0 2 * * *"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          pip install dnspython
+
+      - name: Run scan
+        run: |
+          python3 detect_ech.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ech-scan-results
+          path: |
+            ech_enabled.txt
+            ech_disabled.txt
